@@ -1,0 +1,126 @@
+---
+title: "Goal_programming"
+author: "Srujana"
+output:
+  html_document: null
+  word_document: default
+  pdf_document: default
+---
+****
+
+This notebook contains Assignment- 5
+
+****
+
+***<span style>SUMMARY</span>***
+
+The values 50 and 75 indicate that these are the LHS values for the respective constraints when the decision variables take their optimal values.
+
+1) Producing 0 units of Product 1, 0 units of Product 2, and 15 units of Product 3 is the ideal production plan. Profit is maximized given the constraints.
+
+2)The company employed 2,550 more people than it had planned. Even though exceeding the objective resulted in penalties, the expenses were mitigated by the production plan that maximized profits.
+
+3)The optimization model solution indicates that the corporation can make up to $225 million in profit. This is the maximum profit level that can be achieved within the given constraints and business environment.
+
+****
+
+```{r}
+library(lpSolveAPI)
+```
+***
+
+***PROBLEM STATEMENT***
+
+The Research and Development Division of the Emax Corporation has developed three new
+products. A decision now needs to be made on which mix of these products should be produced.
+Management wants primary consideration given to three factors: total profit, stability in the workforce, and achieving an increase in the company’s earnings next year from the $75 million achieved this year. In particular, using the units given in the following table, they want to 
+
+Maximize Z = P - 6C - 3D,
+
+where
+
+P = total (discounted) profit over the life of the new products,
+
+C = change (in either direction) in the current level of employment,
+
+D = decrease (if any) in next year’s earnings from the current year’s level.
+
+The amount of any increase in earnings does not enter into Z, because management is concerned primarily with just achieving some increase to keep the stockholders happy. 
+
+Questions:
+
+1. Define y1+ and y1-, respectively, as the amount over (if any) and the amount under (if any) the employment level goal. Define y2+ and y2- in the same way for the goal regarding
+earnings next year. Define x1, x2, and x3 as the production rates of Products 1, 2, and 3,
+respectively. With these definitions, use the goal programming technique to express y1+,
+y1- , y2+ and y2- algebraically in terms of x1, x2, and x3. Also express P in terms of x1, x2 and x3.
+
+2. Express management’s objective function in terms of x1, x2, x3, y1+, y1- , y2+ and y2-.
+
+3. Formulate and solve the linear programming model. What are your findings
+
+***
+
+***SOLUTION***
+
+The main objective of this problem is to maximize the profits made from previous years.So the considering the y+ and y- ,below is the objective.
+
+max: 20 x1 + 15 x2 + 25 x3 - 6 y1p - 6 y1n - 3 y2p - 3 y2n
+
+***CONSTRAINTS***
+
+6 x1 + 4 x2 + 5 x3 - y1p + y1n = 50;
+
+8 x1 + 7 x2 + 5 x3 + y2n - y2p = 75;
+y1a >= 0;
+
+y1b >= 0;
+
+y2a >= 0;
+
+y2b >= 0;
+
+x1 >= 0;
+
+x2 >= 0;
+
+x3 >= 0;
+
+where,
+
+x1 = Production rate of Product 1
+
+x2 = Production rate of Product 2
+
+x3 = Production rate of Product 3
+
+y1p = Variable representing the amount over the goal.(positive)
+
+y1n = Variable representing the amount under the goal.(negative)
+
+y2p = variable for the earnings representing amount over the goal.(positive)
+
+y2n = variable for the earnings representing amount over the goal.(negative)
+
+Representing P in terms of x1,x2,x3 
+
+P = 20 x1 + 15 x2 + 25 x3
+
+***
+
+Now, solving the LP Model.
+
+```{r}
+x <- read.lp("goal.lp") #Reading the LP file
+x
+solve(x)
+```
+
+#Solving the objective
+```{r}
+get.objective(x) #get objective value
+
+get.variables(x)   # get values of decision variables
+
+get.constraints(x) #get constraint RHS values
+```
+
